@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asaad Shaikh — UI/UX Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #c8a97e;
+    --accent2: #e8c99e;
+    --text: #f0ece4;
+    --muted: #7a7570;
+    --card: #141414;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; opacity: 0.6; }
+
+  nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 24px 60px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; letter-spacing: 0.02em; color: var(--accent); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 60px 80px; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(200,169,126,0.06) 0%, transparent 70%); }
+  .hero-label { font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(4rem, 10vw, 9rem); font-weight: 900; line-height: 0.92; letter-spacing: -0.02em; margin-bottom: 40px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-name span { display: block; background: linear-gradient(135deg, var(--text) 0%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-roles { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 60px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .role-tag { padding: 8px 18px; border: 1px solid var(--border); border-radius: 100px; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--muted); transition: all 0.3s; cursor: default; }
+  .role-tag:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+  .btn-primary { padding: 14px 32px; background: var(--accent); color: #000; border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.3s; display: inline-block; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+  .btn-ghost { padding: 14px 32px; background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.3s; display: inline-block; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .hero-scroll { position: absolute; bottom: 40px; left: 60px; display: flex; align-items: center; gap: 12px; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0; animation: fadeUp 0.8s 1.2s forwards; }
+  .scroll-line { width: 40px; height: 1px; background: var(--muted); animation: expand 2s 1.5s infinite; }
+
+  section { padding: 120px 60px; }
+  .section-header { display: flex; align-items: center; gap: 24px; margin-bottom: 70px; }
+  .section-num { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--accent); letter-spacing: 0.2em; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; letter-spacing: -0.01em; }
+  .section-line { flex: 1; height: 1px; background: var(--border); max-width: 400px; }
+
+  #about { background: var(--surface); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .about-text p { font-size: 1.1rem; line-height: 1.85; color: #b0aba3; margin-bottom: 24px; }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); padding: 32px 28px; transition: border-color 0.3s; }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--accent); font-weight: 700; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 6px; }
+
+  #skills { background: var(--bg); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .skill-group { background: var(--card); border: 1px solid var(--border); padding: 40px 36px; transition: all 0.4s; position: relative; overflow: hidden; }
+  .skill-group::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.4s; }
+  .skill-group:hover::before { height: 100%; }
+  .skill-group:hover { transform: translateY(-4px); }
+  .skill-icon { font-size: 1.8rem; margin-bottom: 20px; }
+  .skill-group h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 16px; color: var(--text); }
+  .skill-list { list-style: none; }
+  .skill-list li { font-size: 0.85rem; color: var(--muted); padding: 6px 0; border-bottom: 1px solid var(--border); transition: color 0.3s; }
+  .skill-list li:last-child { border-bottom: none; }
+  .skill-group:hover .skill-list li { color: #9a9490; }
+
+  #projects { background: var(--surface); }
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .project-card { background: var(--card); border: 1px solid var(--border); padding: 44px; transition: all 0.4s; position: relative; }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-6px); }
+  .project-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(200,169,126,0.3); padding: 5px 12px; border-radius: 100px; margin-bottom: 20px; }
+  .project-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .project-badge.ongoing .dot { animation: pulse 1.5s infinite; }
+  .project-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--border); font-weight: 900; line-height: 1; margin-bottom: 16px; transition: color 0.4s; }
+  .project-card:hover .project-num { color: var(--accent); opacity: 0.25; }
+  .project-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 10px; }
+  .project-date { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 20px; text-transform: uppercase; }
+  .project-card ul { list-style: none; margin-bottom: 28px; }
+  .project-card ul li { font-size: 0.875rem; color: var(--muted); padding: 7px 0 7px 18px; border-bottom: 1px solid var(--border); line-height: 1.6; position: relative; }
+  .project-card ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 0.7rem; top: 10px; }
+  .project-card ul li:last-child { border-bottom: none; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .tag { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(200,169,126,0.3); padding: 4px 12px; border-radius: 100px; }
+  .project-link { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+  .project-link:hover { color: var(--accent); }
+  .project-link:hover svg { transform: translateX(4px) translateY(-4px); }
+  .project-link svg { transition: transform 0.3s; }
+
+  /* FIGMA GUIDE */
+  .figma-guide { background: linear-gradient(135deg, rgba(200,169,126,0.08), rgba(200,169,126,0.03)); border: 1px solid rgba(200,169,126,0.25); border-radius: 8px; padding: 32px 36px; margin-bottom: 40px; }
+  .figma-guide-title { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; font-weight: 500; }
+  .figma-guide-steps { list-style: none; counter-reset: steps; }
+  .figma-guide-steps li { counter-increment: steps; display: flex; gap: 18px; font-size: 0.875rem; color: var(--muted); line-height: 1.75; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .figma-guide-steps li:last-child { border-bottom: none; }
+  .figma-guide-steps li::before { content: "0" counter(steps); color: var(--accent); font-size: 0.75rem; font-weight: 500; min-width: 22px; padding-top: 3px; font-family: monospace; flex-shrink: 0; }
+  code { background: rgba(200,169,126,0.12); color: var(--accent2); padding: 2px 8px; border-radius: 3px; font-size: 0.82em; font-family: monospace; }
+
+  #resume { background: var(--bg); }
+  .objective-box { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 32px 36px; margin-bottom: 60px; }
+  .objective-box p { font-size: 1rem; color: #b0aba3; line-height: 1.8; font-style: italic; }
+  .resume-container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+  .resume-col h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent); margin-bottom: 30px; padding-bottom: 12px; border-bottom: 1px solid var(--border); letter-spacing: 0.05em; }
+  .timeline-item { position: relative; padding-left: 24px; margin-bottom: 36px; }
+  .timeline-item::before { content: ''; position: absolute; left: 0; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .timeline-item::after { content: ''; position: absolute; left: 3px; top: 14px; width: 1px; height: calc(100% + 14px); background: var(--border); }
+  .timeline-item:last-child::after { display: none; }
+  .timeline-date { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .timeline-title { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 4px; }
+  .timeline-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 8px; }
+  .timeline-desc { font-size: 0.85rem; color: #7a7570; line-height: 1.65; }
+  .timeline-pct { display: inline-block; font-size: 0.78rem; color: var(--accent); border: 1px solid rgba(200,169,126,0.3); padding: 3px 12px; border-radius: 100px; }
+  .soft-skills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .soft-pill { padding: 7px 16px; border: 1px solid var(--border); border-radius: 100px; font-size: 0.8rem; color: var(--muted); transition: all 0.3s; }
+  .soft-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .resume-download { margin-top: 50px; padding: 28px 36px; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 24px; transition: border-color 0.3s; }
+  .resume-download:hover { border-color: var(--accent); }
+  .resume-download p { font-size: 0.85rem; color: var(--muted); }
+  .resume-download strong { display: block; font-size: 1rem; color: var(--text); margin-bottom: 4px; font-weight: 500; }
+
+  #contact { background: var(--surface); text-align: center; padding: 120px 60px; }
+  .contact-intro { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 700; line-height: 1.1; max-width: 800px; margin: 0 auto 50px; letter-spacing: -0.02em; }
+  .contact-intro em { font-style: italic; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+  .contact-link { display: flex; align-items: center; gap: 10px; padding: 14px 28px; border: 1px solid var(--border); border-radius: 4px; color: var(--text); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.06em; transition: all 0.3s; }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  footer { padding: 30px 60px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.06em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes expand { 0%, 100% { width: 40px; } 50% { width: 70px; } }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; } .nav-links { display: none; }
+    section { padding: 80px 24px; } #hero { padding: 100px 24px 60px; }
+    .about-grid, .resume-container { grid-template-columns: 1fr; gap: 40px; }
+    .skills-grid, .projects-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    .hero-scroll { left: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">AS</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#resume">Resume</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-label">UI/UX Designer · B.Tech CSE · RTMNU, Maharashtra</div>
+  <h1 class="hero-name">
+    <span>Asaad</span>
+    <span>Shaikh</span>
+  </h1>
+  <div class="hero-roles">
+    <span class="role-tag">Wireframing & Prototyping</span>
+    <span class="role-tag">User Research</span>
+    <span class="role-tag">Design Thinking</span>
+    <span class="role-tag">Figma</span>
+    <span class="role-tag">Information Architecture</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#projects" class="btn-primary">View Projects</a>
+    <a href="#contact" class="btn-ghost">Get In Touch</a>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm an <strong>entry-level UI/UX design enthusiast</strong> pursuing B.Tech in Computer Science Engineering at RTMNU. My mission is to translate user needs into intuitive, purposeful interfaces through structured research and design thinking.</p>
+      <p>I believe great design starts with <strong>understanding people</strong> — their goals, frustrations, and contexts. From low-fidelity wireframes to high-fidelity prototypes, I approach every project with empathy and iteration.</p>
+      <p>Currently seeking an <strong>internship</strong> to grow under real product challenges and mentorship while completing my UI/UX certification with Tutedude (July 2026).</p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Projects Designed</div></div>
+      <div class="stat-card"><div class="stat-num">22+</div><div class="stat-label">Screens Created</div></div>
+      <div class="stat-card"><div class="stat-num">Jul'26</div><div class="stat-label">UX Certified</div></div>
+      <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Willingness to Learn</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-icon">✦</div>
+      <h3>UX Design</h3>
+      <ul class="skill-list">
+        <li>Wireframing & Low-Fidelity Mockups</li>
+        <li>High-Fidelity Prototyping</li>
+        <li>User Research Basics</li>
+        <li>User Flows & Information Architecture</li>
+        <li>Design Thinking</li>
+        <li>Usability Testing (Beginner)</li>
+      </ul>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-icon">◈</div>
+      <h3>Tools</h3>
+      <ul class="skill-list">
+        <li>Figma — Wireframes, Prototypes, Components</li>
+        <li>Canva</li>
+        <li>GitHub & GitHub Pages</li>
+        <li>HTML5 & CSS3</li>
+      </ul>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-icon">⬡</div>
+      <h3>Soft Skills</h3>
+      <ul class="skill-list">
+        <li>Communication & Collaboration</li>
+        <li>Feedback Adaptation</li>
+        <li>Problem Solving</li>
+        <li>Willingness to Learn</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Projects</h2>
+    <div class="section-line"></div>
+  </div>
+
+
+
+  <div class="projects-grid">
+    <div class="project-card reveal" style="grid-column: 1 / -1;">
+      <div class="project-badge ongoing"><span class="dot"></span>Ongoing</div>
+      <div class="project-num">01</div>
+      <h3>Dry N Wet</h3>
+      <div class="project-date">January 2026 · 10+ Low-Fidelity Screens</div>
+      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:40px;align-items:start;margin-bottom:28px;">
+        <div>
+          <ul style="margin-bottom:0;">
+            <li>Created low-fidelity wireframes based on user needs and problem statements</li>
+            <li>Defined user flow and basic information architecture</li>
+            <li>Applied design thinking principles to structure layouts</li>
+          </ul>
+          <div class="project-tags" style="margin-top:20px;margin-bottom:0;">
+            <span class="tag">Figma</span>
+            <span class="tag">Wireframing</span>
+            <span class="tag">User Flow</span>
+            <span class="tag">Design Thinking</span>
+            <span class="tag">Lo-Fi</span>
+          </div>
+        </div>
+        <div>
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;background:#0d0d0d;">
+            <iframe
+              style="border:none;display:block;"
+              width="100%"
+              height="380"
+              src="https://embed.figma.com/design/nJDdaQfn2gQkHHpXnqqpz6/Assignment-5--Low-fidelity-?node-id=0-1&embed-host=share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div style="margin-top:14px;">
+            <a href="https://www.figma.com/design/nJDdaQfn2gQkHHpXnqqpz6/Assignment-5--Low-fidelity-" target="_blank" class="project-link">
+              Open in Figma
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="grid-column: 1 / -1;">
+      <div class="project-badge"><span class="dot"></span>Completed</div>
+      <div class="project-num">02</div>
+      <h3>Kaam Sathi</h3>
+      <div class="project-date">February 2026 · 12+ Screens</div>
+      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:40px;align-items:start;margin-bottom:28px;">
+        <div>
+          <ul style="margin-bottom:0;">
+            <li>Conducted user research and requirement analysis</li>
+            <li>Designed wireframes and early prototypes</li>
+            <li>Built user personas and journey maps</li>
+            <li>Progressed to high-fidelity designs</li>
+            <li>Iterated designs based on feedback</li>
+          </ul>
+          <div class="project-tags" style="margin-top:20px;margin-bottom:0;">
+            <span class="tag">Figma</span>
+            <span class="tag">User Research</span>
+            <span class="tag">Personas</span>
+            <span class="tag">Journey Maps</span>
+            <span class="tag">Prototyping</span>
+          </div>
+        </div>
+        <div>
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;background:#0d0d0d;">
+            <iframe
+              style="border:none;display:block;"
+              width="100%"
+              height="380"
+              src="https://embed.figma.com/design/2pKvdCT7yjj8OeAQZNUQiC/Kaamsathi?node-id=0-1&embed-host=share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div style="margin-top:14px;">
+            <a href="https://www.figma.com/design/2pKvdCT7yjj8OeAQZNUQiC/Kaamsathi" target="_blank" class="project-link">
+              Open in Figma
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resume">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Resume</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="objective-box reveal">
+    <p>"Entry-level UI/UX design enthusiast seeking an internship to translate user needs into intuitive interfaces while continuously improving design skills through real product challenges and mentorship."</p>
+  </div>
+
+  <div class="resume-container">
+    <div class="resume-col reveal">
+      <h3>Education</h3>
+      <div class="timeline-item">
+        <div class="timeline-date">2022 — Present</div>
+        <div class="timeline-title">B.Tech in Computer Science Engineering</div>
+        <div class="timeline-sub">RTMNU — Pursuing</div>
+        <div class="timeline-desc">Studying core CS subjects alongside self-developing UI/UX design and web skills.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2022</div>
+        <div class="timeline-title">HSC — Maharashtra Board</div>
+        <div class="timeline-sub">Class 12th</div>
+        <span class="timeline-pct">73.17%</span>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2020</div>
+        <div class="timeline-title">SSC — Maharashtra Board</div>
+        <div class="timeline-sub">Class 10th</div>
+        <span class="timeline-pct">63.80%</span>
+      </div>
+
+
+    </div>
+
+    <div class="resume-col reveal">
+      <h3>Certification</h3>
+      <div class="timeline-item">
+        <div class="timeline-date">Ongoing — July 2026</div>
+        <div class="timeline-title">UI/UX Design Certification</div>
+        <div class="timeline-sub">Tutedude</div>
+        <div class="timeline-desc">Comprehensive program covering design fundamentals, user research, Figma prototyping, and usability testing.</div>
+      </div>
+
+      <h3 style="margin-top:48px;">Projects</h3>
+      <div class="timeline-item">
+        <div class="timeline-date">January 2026 — Present</div>
+        <div class="timeline-title">Dry N Wet</div>
+        <div class="timeline-sub">10+ Low-Fidelity Screens · Ongoing</div>
+        <div class="timeline-desc">Wireframes, user flows, and information architecture using design thinking methodology.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">February 2026</div>
+        <div class="timeline-title">Kaam Sathi</div>
+        <div class="timeline-sub">12+ Screens · Completed</div>
+        <div class="timeline-desc">Full UX process: user research, personas, journey maps, wireframes, and iterative prototyping toward hi-fi.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📌 Upload ASAAD_SHAIKH.pdf to your GitHub repo root folder, then this link will work automatically -->
+  <div class="resume-download reveal">
+    <div>
+      <strong>Download Full Resume</strong>
+      <p>Upload <code>ASAAD_SHAIKH.pdf</code> to your GitHub repo root — the link below will work automatically</p>
+    </div>
+    <a href="./ASAAD_SHAIKH.pdf" class="btn-primary" download="ASAAD_SHAIKH.pdf">Download PDF ↓</a>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="contact-intro reveal">Let's build something <em>remarkable</em> together.</h2>
+  <div class="contact-links reveal">
+    <a id="email-link" class="contact-link" style="cursor:pointer;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+      <span id="email-text">asaadwork7866&#64;gmail.com</span>
+    </a>
+    </a>
+    <a href="https://www.linkedin.com/in/asaad-shaikh-71597124a/" target="_blank" class="contact-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://github.com/Asaad56" target="_blank" class="contact-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      GitHub
+    </a>
+    <a href="tel:+919579369374" class="contact-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      +91 9579369374
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Asaad Shaikh. All rights reserved.</span>
+  <span>UI/UX Designer · B.Tech CSE · RTMNU</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Build email link dynamically to prevent Cloudflare protection
+  const u = 'asaadwork7866';
+  const d = 'gmail.com';
+  const el = document.getElementById('email-link');
+  if (el) { el.addEventListener('click', () => { window.location.href = 'mailto:' + u + '@' + d; }); }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.getAttribute('id'); });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : ''; });
+  });
+</script>
+</body>
+</html>
